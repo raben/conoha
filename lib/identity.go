@@ -2,8 +2,7 @@ package lib
 
 import (
 	"encoding/json"
-	//"fmt"
-	"time"
+	"github.com/raben/conoha/lib/models"
 )
 
 const (
@@ -11,50 +10,14 @@ const (
 	IdentityEndpoint   = "https://identity.tyo1.conoha.io/"
 )
 
-type IdentityVersion struct {
-	Versions IdentityVersionValues `json:"versions"`
-}
-type IdentityVersionValues struct {
-	Values []IdentityVersionValue `json:"values"`
-}
-type IdentityVersionValue struct {
-	Id      string    `json:"id"`
-	Status  string    `json:"status"`
-	Updated time.Time `json:"updated"`
-}
-type Auth struct {
-	UserName string `json:"username"`
-	Password string `json:"password"`
-	TenantId string `json:"tenantId"`
-}
-type AuthConfig struct {
-	TenantId  string    `json:tenant_id`
-	UserName  string    `json:username`
-	AuthToken string    `json:auth_token`
-	ExpiredAt time.Time `json:expired_at`
-}
-type IdentityToken struct {
-	Access IdentityTokenAccess `json:"access"`
-}
-type IdentityTokenAccess struct {
-	Token IdentityTokenAccessToken `json:"token"`
-}
-type IdentityTokenAccessToken struct {
-	IssuedAt string    `json:"issued_at"`
-	Expires  time.Time `json:"expires"`
-	Id       string    `json:"id"`
-	Type     string    `json:"type"`
-	Name     string    `json:"name"`
-}
-
-func (c *Client) GetIdentityVersion() (identityVersion IdentityVersion, err error) {
+func (c *Client) GetIdentityVersion() (identityVersion models.IdentityVersion, err error) {
 	if err := c.get(IdentityEndpoint, &identityVersion); err != nil {
-		return IdentityVersion{}, err
+		return models.IdentityVersion{}, err
 	}
 	return identityVersion, nil
 }
 
-func (c *Client) GetIdentityToken(auth Auth) (identityToken IdentityToken, err error) {
+func (c *Client) GetIdentityToken(auth models.Auth) (identityToken models.IdentityToken, err error) {
 
 	authinfo := map[string]interface{}{
 		"auth": map[string]interface{}{
@@ -67,10 +30,10 @@ func (c *Client) GetIdentityToken(auth Auth) (identityToken IdentityToken, err e
 	}
 	input, err := json.Marshal(authinfo)
 	if err != nil {
-		return IdentityToken{}, err
+		return models.IdentityToken{}, err
 	}
 	if err := c.post(IdentityEndpoint+"/"+IdentityAPIVersion+"/tokens", input, &identityToken); err != nil {
-		return IdentityToken{}, err
+		return models.IdentityToken{}, err
 	}
 	return identityToken, nil
 }

@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/jawher/mow.cli"
-	conoha "github.com/raben/conoha/lib"
+	conoha "github.com/raben/conoha/lib/models"
 )
 
 func AccountVersion(cmd *cli.Cmd) {

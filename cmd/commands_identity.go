@@ -6,7 +6,7 @@ import (
 	"syscall"
 
 	"github.com/jawher/mow.cli"
-	conoha "github.com/raben/conoha/lib"
+	conoha "github.com/raben/conoha/lib/models"
 	terminal "golang.org/x/crypto/ssh/terminal"
 )
 

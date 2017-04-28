@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/juju/ratelimit"
+	"github.com/raben/conoha/lib/models"
 )
 
 const (
@@ -26,7 +27,7 @@ type Client struct {
 	MaxAttempts int
 	bucket      *ratelimit.Bucket
 
-	AuthConfig AuthConfig
+	AuthConfig models.AuthConfig
 }
 
 var retryableStatusCodes = map[int]struct{}{
@@ -49,7 +50,7 @@ func NewClient() *Client {
 	}
 }
 
-func (c *Client) SetAuth(config AuthConfig) *Client {
+func (c *Client) SetAuth(config models.AuthConfig) *Client {
 	c.AuthConfig = config
 	return c
 }
