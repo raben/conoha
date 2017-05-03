@@ -4,7 +4,6 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"errors"
-	//	"fmt"
 	"io"
 	"io/ioutil"
 	"math/rand"
@@ -108,7 +107,7 @@ func (c *Client) do(req *http.Request, data interface{}) error {
 		if err != nil {
 			return err
 		}
-		if resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusMultipleChoices {
+		if resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusMultipleChoices || resp.StatusCode == http.StatusAccepted {
 			if data != nil {
 				if string(body) == `[]` {
 					data = nil
@@ -120,7 +119,6 @@ func (c *Client) do(req *http.Request, data interface{}) error {
 			}
 			return nil
 		}
-
 		apiError = errors.New(string(body))
 		if !isCodeRetryable(resp.StatusCode) {
 			break

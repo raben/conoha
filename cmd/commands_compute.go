@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/jawher/mow.cli"
@@ -59,5 +60,41 @@ func ComputeImages(cmd *cli.Cmd) {
 		}
 
 		SliceToMap(computeImages.Images)
+	}
+}
+
+func ComputeServerStart(cmd *cli.Cmd) {
+	id := cmd.String(cli.StringOpt{
+		Name:      "i id",
+		Value:     "",
+		Desc:      "server id",
+		HideValue: true,
+	})
+	cmd.Spec = "-i"
+	cmd.Action = func() {
+		err := GetAuthorizedClient().StartComputeServer(*id)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Print("Accepted Start Request.\n\n")
+	}
+}
+
+func ComputeServerStop(cmd *cli.Cmd) {
+	id := cmd.String(cli.StringOpt{
+		Name:      "i id",
+		Value:     "",
+		Desc:      "server id",
+		HideValue: true,
+	})
+	cmd.Spec = "-i"
+	cmd.Action = func() {
+		err := GetAuthorizedClient().StopComputeServer(*id)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Print("Accepted Stop Request.\n\n")
 	}
 }

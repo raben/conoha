@@ -1,8 +1,9 @@
 package lib
 
 import (
-	"github.com/raben/conoha/lib/models"
+	"encoding/json"
 	"strings"
+	"github.com/raben/conoha/lib/models"
 )
 
 const (
@@ -46,4 +47,26 @@ func (c *Client) GetComputeImages(computeImagesValue models.ComputeImagesValue) 
 	computeImages.Images = filterdValue
 
 	return computeImages, nil
+}
+
+func (c *Client) StartComputeServer(serverId string) (err error) {
+	actioninfo := map[string]interface{}{
+		"os-start": nil,
+	}
+	input, err := json.Marshal(actioninfo)
+	if err := c.post(ComputeEndpoint+ComputeAPIVersion+"/"+c.AuthConfig.TenantId+"/servers/"+serverId+"/action", input, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *Client) StopComputeServer(serverId string) (err error) {
+	actioninfo := map[string]interface{}{
+		"os-stop": nil,
+	}
+	input, err := json.Marshal(actioninfo)
+	if err := c.post(ComputeEndpoint+ComputeAPIVersion+"/"+c.AuthConfig.TenantId+"/servers/"+serverId+"/action", input, nil); err != nil {
+		return err
+	}
+	return nil
 }

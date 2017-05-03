@@ -87,7 +87,7 @@ func ReadConfig() (config conoha.AuthConfig, err error) {
 	dir := usr.HomeDir + "/" + ConfigDir
 	file, e := ioutil.ReadFile(dir + "/" + ConfigFile)
 	if e != nil {
-		log.Fatal("Not Found Config File. Please exec 'conoha init'")
+		log.Fatal("Not Found Config File. Please exec 'conoha init'.")
 	}
 	json.Unmarshal(file, &config)
 
