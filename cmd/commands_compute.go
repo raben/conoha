@@ -88,9 +88,15 @@ func ComputeServerStop(cmd *cli.Cmd) {
 		Desc:      "server id",
 		HideValue: true,
 	})
-	cmd.Spec = "-i"
+	force := cmd.Bool(cli.BoolOpt{
+		Name:      "f force",
+		Value:     false,
+		Desc:      "force stop",
+		HideValue: true,
+	})
+	cmd.Spec = "-if"
 	cmd.Action = func() {
-		err := GetAuthorizedClient().StopComputeServer(*id)
+		err := GetAuthorizedClient().StopComputeServer(*id, *force)
 
 		if err != nil {
 			log.Fatal(err)

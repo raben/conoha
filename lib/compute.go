@@ -60,9 +60,14 @@ func (c *Client) StartComputeServer(serverId string) (err error) {
 	return nil
 }
 
-func (c *Client) StopComputeServer(serverId string) (err error) {
+func (c *Client) StopComputeServer(serverId string, force bool) (err error) {
 	actioninfo := map[string]interface{}{
 		"os-stop": nil,
+	}
+	if force {
+		actioninfo["os-stop"] = map[string]interface{}{
+			"force-stop": true,
+		}
 	}
 	input, err := json.Marshal(actioninfo)
 	if err := c.post(ComputeEndpoint+ComputeAPIVersion+"/"+c.AuthConfig.TenantId+"/servers/"+serverId+"/action", input, nil); err != nil {
