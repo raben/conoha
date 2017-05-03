@@ -17,6 +17,7 @@ func (c *CLI) RegisterCommands() {
 		cmd.Command("images", "Compute Image List", ComputeImages)
 		cmd.Command("start", "Compute Server Start", ComputeServerStart)
 		cmd.Command("stop", "Compute Server Stop", ComputeServerStop)
+		cmd.Command("restart", "Compute Server Restart", ComputeServerRestart)
 	})
 
 	c.Command("identity", "Identity Service", func(cmd *cli.Cmd) {

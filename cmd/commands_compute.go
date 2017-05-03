@@ -104,3 +104,27 @@ func ComputeServerStop(cmd *cli.Cmd) {
 		fmt.Print("Accepted Stop Request.\n\n")
 	}
 }
+
+func ComputeServerRestart(cmd *cli.Cmd) {
+	id := cmd.String(cli.StringOpt{
+		Name:      "i id",
+		Value:     "",
+		Desc:      "server id",
+		HideValue: true,
+	})
+	force := cmd.Bool(cli.BoolOpt{
+		Name:      "f force",
+		Value:     false,
+		Desc:      "force stop",
+		HideValue: true,
+	})
+	cmd.Spec = "-if"
+	cmd.Action = func() {
+		err := GetAuthorizedClient().RestartComputeServer(*id, *force)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Print("Accepted Restart Request.\n\n")
+	}
+}

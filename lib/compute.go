@@ -2,8 +2,8 @@ package lib
 
 import (
 	"encoding/json"
-	"strings"
 	"github.com/raben/conoha/lib/models"
+	"strings"
 )
 
 const (
@@ -68,6 +68,25 @@ func (c *Client) StopComputeServer(serverId string, force bool) (err error) {
 		actioninfo["os-stop"] = map[string]interface{}{
 			"force-stop": true,
 		}
+	}
+	input, err := json.Marshal(actioninfo)
+	if err := c.post(ComputeEndpoint+ComputeAPIVersion+"/"+c.AuthConfig.TenantId+"/servers/"+serverId+"/action", input, nil); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (c *Client) RestartComputeServer(serverId string, force bool) (err error) {
+	stopType := "SOFT"
+
+	if force {
+		stopType = "HARD"
+	}
+
+	actioninfo := map[string]interface{}{
+		"reboot": map[string]interface{}{
+			"type": stopType,
+		},
 	}
 	input, err := json.Marshal(actioninfo)
 	if err := c.post(ComputeEndpoint+ComputeAPIVersion+"/"+c.AuthConfig.TenantId+"/servers/"+serverId+"/action", input, nil); err != nil {
