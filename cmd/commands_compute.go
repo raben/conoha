@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/jawher/mow.cli"
-	conoha "github.com/raben/conoha/lib/models"
 )
 
 func ComputeVersion(cmd *cli.Cmd) {
@@ -23,8 +22,15 @@ func ComputeVersion(cmd *cli.Cmd) {
 }
 
 func ComputeFlavor(cmd *cli.Cmd) {
+	name := cmd.String(cli.StringOpt{
+		Name:      "n name",
+		Value:     "",
+		Desc:      "Flavor Name",
+		HideValue: true,
+	})
+
 	cmd.Action = func() {
-		computeFlavors, err := GetAuthorizedClient().GetComputeFlavors()
+		computeFlavors, err := GetAuthorizedClient().GetComputeFlavors(*name)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -49,12 +55,12 @@ func ComputeImages(cmd *cli.Cmd) {
 	name := cmd.String(cli.StringOpt{
 		Name:      "n name",
 		Value:     "",
-		Desc:      "image name",
+		Desc:      "Image Name",
 		HideValue: true,
 	})
 
 	cmd.Action = func() {
-		computeImages, err := GetAuthorizedClient().GetComputeImages(conoha.ComputeImagesValue{Name: *name})
+		computeImages, err := GetAuthorizedClient().GetComputeImages(*name)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -63,11 +69,53 @@ func ComputeImages(cmd *cli.Cmd) {
 	}
 }
 
+func ComputeServerCreate(cmd *cli.Cmd) {
+	image := cmd.String(cli.StringOpt{
+		Name:      "i image",
+		Value:     "",
+		Desc:      "Image Name",
+		HideValue: true,
+	})
+	flavor := cmd.String(cli.StringOpt{
+		Name:      "f flavor",
+		Value:     "",
+		Desc:      "Flavor Name",
+		HideValue: true,
+	})
+	cmd.Spec = "-i -f"
+	cmd.Action = func() {
+		err := GetAuthorizedClient().CreateComputeServer(*image, *flavor)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Print("Accepted Create Request.\n\n")
+	}
+}
+
+func ComputeServerRemove(cmd *cli.Cmd) {
+	id := cmd.String(cli.StringOpt{
+		Name:      "i id",
+		Value:     "",
+		Desc:      "Server Id",
+		HideValue: true,
+	})
+	cmd.Spec = "-i"
+	cmd.Action = func() {
+		err := GetAuthorizedClient().RemoveComputeServer(*id)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Print("Accepted Remove Request.\n\n")
+	}
+}
+
 func ComputeServerStart(cmd *cli.Cmd) {
 	id := cmd.String(cli.StringOpt{
 		Name:      "i id",
 		Value:     "",
-		Desc:      "server id",
+		Desc:      "Server Id",
 		HideValue: true,
 	})
 	cmd.Spec = "-i"
@@ -85,7 +133,7 @@ func ComputeServerStop(cmd *cli.Cmd) {
 	id := cmd.String(cli.StringOpt{
 		Name:      "i id",
 		Value:     "",
-		Desc:      "server id",
+		Desc:      "Server Id",
 		HideValue: true,
 	})
 	force := cmd.Bool(cli.BoolOpt{

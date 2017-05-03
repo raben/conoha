@@ -70,6 +70,14 @@ func (c *Client) post(path string, value []byte, data interface{}) error {
 	return c.do(req, data)
 }
 
+func (c *Client) delete(path string, data interface{}) error {
+	req, err := c.newRequest("DELETE", path, nil)
+	if err != nil {
+		return err
+	}
+	return c.do(req, data)
+}
+
 func (c *Client) newRequest(method string, path string, body io.Reader) (*http.Request, error) {
 	req, err := http.NewRequest(method, path, body)
 
@@ -107,7 +115,7 @@ func (c *Client) do(req *http.Request, data interface{}) error {
 		if err != nil {
 			return err
 		}
-		if resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusMultipleChoices || resp.StatusCode == http.StatusAccepted {
+		if resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusMultipleChoices || resp.StatusCode == http.StatusAccepted || resp.StatusCode == http.StatusNoContent {
 			if data != nil {
 				if string(body) == `[]` {
 					data = nil
