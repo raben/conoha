@@ -26,6 +26,11 @@ func Init(cmd *cli.Cmd) {
 	cmd.Action = func() {
 		reader := bufio.NewReader(os.Stdin)
 
+		fmt.Print("Region: ")
+		region, err := reader.ReadString('\n')
+		if err != nil {
+			log.Fatal("Cannot Empty Region.")
+		}
 		fmt.Print("TenantId: ")
 		tenantId, err := reader.ReadString('\n')
 		if err != nil {
@@ -45,6 +50,7 @@ func Init(cmd *cli.Cmd) {
 		var auth = conoha.Auth{
 			UserName: strings.Trim(string(userName), "\n"),
 			Password: strings.Trim(string(password), "\n"),
+			Region:   strings.Trim(string(region), "\n"),
 			TenantId: strings.Trim(string(tenantId), "\n"),
 		}
 		CreateConfig(auth)
@@ -67,6 +73,7 @@ func Verify() (config conoha.AuthConfig, err error) {
 		var auth = conoha.Auth{
 			UserName: strings.Trim(config.UserName, "\n"),
 			Password: strings.Trim(string(password), "\n"),
+			Region:   strings.Trim(config.Region, "\n"),
 			TenantId: strings.Trim(config.TenantId, "\n"),
 		}
 		config, err := CreateConfig(auth)
@@ -101,6 +108,7 @@ func CreateConfig(auth conoha.Auth) (config conoha.AuthConfig, err error) {
 	}
 
 	config = conoha.AuthConfig{
+		Region:    auth.Region,
 		TenantId:  auth.TenantId,
 		UserName:  auth.UserName,
 		AuthToken: identity.Access.Token.Id,

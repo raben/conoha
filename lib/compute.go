@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/raben/conoha/lib/models"
+	"github.com/raben/conoha/spec"
 	"strings"
 )
 
@@ -66,21 +67,21 @@ func (c *Client) GetComputeImages(name string) (computeImages models.ComputeImag
 	return computeImages, nil
 }
 
-func (c *Client) CreateComputeServer(image string, flavor string) (err error) {
-	computeFlavors, err := c.GetComputeFlavors(flavor)
+func (c *Client) CreateComputeServer(spec spec.ConohaServerConfig) (err error) {
+	computeFlavors, err := c.GetComputeFlavors(spec.Flavor)
 	if err != nil {
 		return err
 	}
 	if len(computeFlavors.Flavors) != 1 {
-		return errors.New("Not Found Flavors [ " + flavor + " ]")
+		return errors.New("Not Found Flavors [ " + spec.Flavor + " ]")
 	}
 
-	computeImages, err := c.GetComputeImages(image)
+	computeImages, err := c.GetComputeImages(spec.Image)
 	if err != nil {
 		return err
 	}
 	if len(computeImages.Images) != 1 {
-		return errors.New("Not Found Images [ " + image + " ]")
+		return errors.New("Not Found Images [ " + spec.Image + " ]")
 	}
 
 	info := map[string]interface{}{

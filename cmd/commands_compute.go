@@ -5,7 +5,8 @@ import (
 	"log"
 
 	"github.com/jawher/mow.cli"
-	conoha "github.com/raben/conoha/lib/models"
+	"github.com/raben/conoha/lib/models"
+	"github.com/raben/conoha/spec"
 )
 
 func ComputeVersion(cmd *cli.Cmd) {
@@ -67,7 +68,7 @@ func ComputeServer(cmd *cli.Cmd) {
 			log.Fatal(err)
 		}
 
-		SliceToMap([]conoha.ComputeServersValue{computeServer.Server})
+		SliceToMap([]models.ComputeServersValue{computeServer.Server})
 	}
 }
 
@@ -104,7 +105,12 @@ func ComputeServerCreate(cmd *cli.Cmd) {
 	})
 	cmd.Spec = "-i -f"
 	cmd.Action = func() {
-		err := GetAuthorizedClient().CreateComputeServer(*image, *flavor)
+		c := GetAuthorizedClient()
+		err := c.CreateComputeServer(spec.ConohaServerConfig{
+			Region: c.AuthConfig.Region,
+			Image:  *image,
+			Flavor: *flavor,
+		})
 
 		if err != nil {
 			log.Fatal(err)
