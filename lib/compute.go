@@ -42,6 +42,13 @@ func (c *Client) GetComputeServers() (computeServers models.ComputeServers, err 
 	return computeServers, nil
 }
 
+func (c *Client) GetComputeServer(serverId string) (computeServer models.ComputeServer, err error) {
+	if err := c.get(ComputeEndpoint+ComputeAPIVersion+"/"+c.AuthConfig.TenantId+"/servers/"+serverId, &computeServer); err != nil {
+		return models.ComputeServer{}, err
+	}
+	return computeServer, nil
+}
+
 func (c *Client) GetComputeImages(name string) (computeImages models.ComputeImages, err error) {
 
 	if err := c.get(ComputeEndpoint+ComputeAPIVersion+"/"+c.AuthConfig.TenantId+"/images/detail", &computeImages); err != nil {

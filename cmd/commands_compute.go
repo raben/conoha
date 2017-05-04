@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/jawher/mow.cli"
+	conoha "github.com/raben/conoha/lib/models"
 )
 
 func ComputeVersion(cmd *cli.Cmd) {
@@ -48,6 +49,25 @@ func ComputeServers(cmd *cli.Cmd) {
 		}
 
 		SliceToMap(computeServers.Servers)
+	}
+}
+
+func ComputeServer(cmd *cli.Cmd) {
+	serverId := cmd.String(cli.StringOpt{
+		Name:      "i serverId",
+		Value:     "",
+		Desc:      "Server Id",
+		HideValue: true,
+	})
+
+	cmd.Spec = "-i"
+	cmd.Action = func() {
+		computeServer, err := GetAuthorizedClient().GetComputeServer(*serverId)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		SliceToMap([]conoha.ComputeServersValue{computeServer.Server})
 	}
 }
 

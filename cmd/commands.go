@@ -14,6 +14,7 @@ func (c *CLI) RegisterCommands() {
 		cmd.Command("version", "Compute Version", ComputeVersion)
 		cmd.Command("flavors", "Compute Flavor List", ComputeFlavor)
 		cmd.Command("servers", "Compute Server List", ComputeServers)
+		cmd.Command("server", "Compute Server Detail", ComputeServer)
 		cmd.Command("images", "Compute Image List", ComputeImages)
 		cmd.Command("up", "Compute Server Create", ComputeServerCreate)
 		cmd.Command("rm", "Compute Server Remove", ComputeServerRemove)
