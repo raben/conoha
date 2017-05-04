@@ -50,6 +50,19 @@ func (c *Client) GetComputeServer(serverId string) (computeServer models.Compute
 	return computeServer, nil
 }
 
+func (c *Client) GetComputeServerAddresses(serverId string) (addresses []models.ComputeServerValueAddress, err error) {
+	computeServer, err := c.GetComputeServer(serverId)
+	if err != nil {
+		return []models.ComputeServerValueAddress{}, err
+	}
+	for _, value := range computeServer.Server.Addresses {
+		for _, v := range value {
+			addresses = append(addresses, v)
+		}
+	}
+	return addresses, nil
+}
+
 func (c *Client) GetComputeImages(name string) (computeImages models.ComputeImages, err error) {
 
 	if err := c.get(ComputeEndpoint+ComputeAPIVersion+"/"+c.AuthConfig.TenantId+"/images/detail", &computeImages); err != nil {
