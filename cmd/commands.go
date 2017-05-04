@@ -32,6 +32,8 @@ func (c *CLI) RegisterCommands() {
 		cmd.Command("order-items", "Billing Item List", AccountOrderItems)
 		cmd.Command("payment-history", "Payment History List", AccountPaymentHistory)
 		cmd.Command("payment-summary", "Payment Summary", AccountPaymentSummary)
+		cmd.Command("billing-invoices", "Billing Invoices", AccountBillingInvoices)
+		cmd.Command("billing-invoice", "Billing Invoices", AccountBillingInvoice)
 		cmd.Command("notifications", "Notification List", AccountNotifications)
 	})
 

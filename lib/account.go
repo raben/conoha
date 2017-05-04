@@ -37,6 +37,20 @@ func (c *Client) GetAccountPaymentSummary() (accountPaymentSummary models.Accoun
 	return accountPaymentSummary, nil
 }
 
+func (c *Client) GetAccountBillingInvoices() (accountBillingInvoices models.AccountBillingInvoices, err error) {
+	if err := c.get(AccountEndpoint+AccountAPIVersion+"/"+c.AuthConfig.TenantId+"/billing-invoices/", &accountBillingInvoices); err != nil {
+		return models.AccountBillingInvoices{}, err
+	}
+	return accountBillingInvoices, nil
+}
+
+func (c *Client) GetAccountBillingInvoice(invoiceId string) (accountBillingInvoice models.AccountBillingInvoice, err error) {
+	if err := c.get(AccountEndpoint+AccountAPIVersion+"/"+c.AuthConfig.TenantId+"/billing-invoices/"+invoiceId, &accountBillingInvoice); err != nil {
+		return models.AccountBillingInvoice{}, err
+	}
+	return accountBillingInvoice, nil
+}
+
 func (c *Client) GetAccountNotifications() (accountNotifications models.AccountNotifications, err error) {
 	if err := c.get(AccountEndpoint+AccountAPIVersion+"/"+c.AuthConfig.TenantId+"/notifications", &accountNotifications); err != nil {
 		return models.AccountNotifications{}, err

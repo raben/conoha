@@ -110,7 +110,6 @@ func (c *Client) do(req *http.Request, data interface{}) error {
 		}
 
 		body, err := ioutil.ReadAll(resp.Body)
-
 		resp.Body.Close()
 		if err != nil {
 			return err

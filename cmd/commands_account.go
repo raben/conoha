@@ -54,6 +54,35 @@ func AccountPaymentSummary(cmd *cli.Cmd) {
 	}
 }
 
+func AccountBillingInvoices(cmd *cli.Cmd) {
+	cmd.Action = func() {
+		accountBillingInvoices, err := GetAuthorizedClient().GetAccountBillingInvoices()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		SliceToMap(accountBillingInvoices.BillingInvoices)
+	}
+}
+
+func AccountBillingInvoice(cmd *cli.Cmd) {
+	invoiceId := cmd.String(cli.StringOpt{
+		Name:      "i invoiceId",
+		Value:     "",
+		Desc:      "Invoice Id",
+		HideValue: true,
+	})
+	cmd.Spec = "-i"
+	cmd.Action = func() {
+		accountBillingInvoice, err := GetAuthorizedClient().GetAccountBillingInvoice(*invoiceId)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		SliceToMap(accountBillingInvoice.BillingInvoice.Items)
+	}
+}
+
 func AccountNotifications(cmd *cli.Cmd) {
 	cmd.Action = func() {
 		accountNotifications, err := GetAuthorizedClient().GetAccountNotifications()
