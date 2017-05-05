@@ -80,21 +80,21 @@ func (c *Client) GetComputeImages(name string) (computeImages models.ComputeImag
 	return computeImages, nil
 }
 
-func (c *Client) CreateComputeServer(spec spec.ConohaServerConfig) (err error) {
+func (c *Client) CreateComputeServer(spec spec.ConohaServerConfig) (computeServerMin models.ComputeServerMin, err error) {
 	computeFlavors, err := c.GetComputeFlavors(spec.Flavor)
 	if err != nil {
-		return err
+		return models.ComputeServerMin{}, err
 	}
 	if len(computeFlavors.Flavors) != 1 {
-		return errors.New("Not Found Flavors [ " + spec.Flavor + " ]")
+		return models.ComputeServerMin{}, errors.New("Not Found Flavors [ " + spec.Flavor + " ]")
 	}
 
 	computeImages, err := c.GetComputeImages(spec.Image)
 	if err != nil {
-		return err
+		return models.ComputeServerMin{}, err
 	}
 	if len(computeImages.Images) != 1 {
-		return errors.New("Not Found Images [ " + spec.Image + " ]")
+		return models.ComputeServerMin{}, errors.New("Not Found Images [ " + spec.Image + " ]")
 	}
 
 	info := map[string]interface{}{
@@ -104,11 +104,11 @@ func (c *Client) CreateComputeServer(spec spec.ConohaServerConfig) (err error) {
 		},
 	}
 	input, err := json.Marshal(info)
-	if err := c.post(ComputeEndpoint+ComputeAPIVersion+"/"+c.AuthConfig.TenantId+"/servers", input, nil); err != nil {
-		return err
+	if err := c.post(ComputeEndpoint+ComputeAPIVersion+"/"+c.AuthConfig.TenantId+"/servers", input, &computeServerMin); err != nil {
+		return models.ComputeServerMin{}, err
 	}
 
-	return nil
+	return computeServerMin, nil
 }
 
 func (c *Client) RemoveComputeServer(serverId string) (err error) {

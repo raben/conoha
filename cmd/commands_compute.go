@@ -106,7 +106,7 @@ func ComputeServerCreate(cmd *cli.Cmd) {
 	cmd.Spec = "-i -f"
 	cmd.Action = func() {
 		c := GetAuthorizedClient()
-		err := c.CreateComputeServer(spec.ConohaServerConfig{
+		computeServerMin, err := c.CreateComputeServer(spec.ConohaServerConfig{
 			Region: c.AuthConfig.Region,
 			Image:  *image,
 			Flavor: *flavor,
@@ -115,7 +115,8 @@ func ComputeServerCreate(cmd *cli.Cmd) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Print("Accepted Create Request.\n\n")
+		fmt.Print("Accepted Create Request.\n")
+		fmt.Print("Server Id: " + computeServerMin.Server.Id + "\n\n")
 	}
 }
 
