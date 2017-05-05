@@ -101,6 +101,7 @@ func (c *Client) CreateComputeServer(spec spec.ConohaServerConfig) (computeServe
 		"server": map[string]interface{}{
 			"imageRef":  computeImages.Images[0].Id,
 			"flavorRef": computeFlavors.Flavors[0].Id,
+			"key_name":  spec.SSHKey,
 		},
 	}
 	input, err := json.Marshal(info)

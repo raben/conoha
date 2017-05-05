@@ -9,6 +9,7 @@ const (
 	defaultRegion = "tyo1"
 	defaultImage  = "vmi-ubuntu-16.04-amd64-unified-20gb"
 	defaultFlavor = "g-512mb"
+	defaultSSHKey = ""
 )
 
 type ConohaServerConfig struct {
@@ -16,6 +17,7 @@ type ConohaServerConfig struct {
 	Region     string
 	Image      string
 	Flavor     string
+	SSHKey     string
 	EnginePort int
 }
 
@@ -23,6 +25,7 @@ var DefaultServerConfig = &ConohaServerConfig{
 	Region:     defaultRegion,
 	Image:      defaultImage,
 	Flavor:     defaultFlavor,
+	SSHKey:     defaultSSHKey,
 	EnginePort: engine.DefaultPort,
 }
 
@@ -46,6 +49,13 @@ var McnFlags = []mcnflag.Flag{
 		Name:   "conoha-flavor",
 		Usage:  "Conoha Flavor Name",
 		Value:  defaultFlavor,
+	},
+
+	mcnflag.StringFlag{
+		EnvVar: "CONOHA_SSH_KEY",
+		Name:   "conoha-ssh-key",
+		Usage:  "SSH Private Key Path",
+		Value:  "",
 	},
 
 	mcnflag.IntFlag{
